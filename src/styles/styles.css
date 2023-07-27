@@ -1,0 +1,154 @@
+.btn {
+    margin: 5px;
+    width: fit-content;
+}
+
+.btn.cash {
+    background-color:burlywood;
+}
+
+.btn.check {
+    background-color:lightslategray;
+}
+
+.btn.savings {
+    background-color:limegreen;;
+}
+
+.btn.checking {
+    background-color:coral;
+}
+.btn.btn-primary.text-uppercase {
+    background-color: lightskyblue;
+    color:black;
+    border:black solid 1px;
+    width: 110px;
+    height: 50px;
+    text-align: center;
+    padding-top: 6px;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.btn.btn-primary.text-uppercase:hover{
+    background-color:aqua;
+}
+
+.masthead-subheading {
+    font-size: 100px;
+    color: aliceblue
+}
+
+h1, h5 {
+    text-align: center;
+ }
+
+ h4 {
+    padding-top: 5px;
+ }
+
+input {
+    margin: 5px;
+    width: fit-content;
+}
+
+#number {
+    width: 190px;
+}
+
+.card.mb-3 {
+    width: 25rem;
+    margin: 10px;
+}
+
+.card-header {
+    background-color:rgb(56, 199, 97);
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size:x-large;
+}
+
+select {
+	border: darkorchid solid 3px;
+	font-family: Arial;
+	font-size: medium;
+	height: 35px;
+	width: 125px
+}
+
+.grid {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center;
+    padding-top: 20px;
+    padding-left: 50px;
+}
+
+.account-grid, .deposit-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 125px;
+}
+
+.navbar-brand.PNW, .nav-link.change {
+    color: green;
+}
+
+.change:hover {
+    background-color: blue;
+}
+
+.nav-item.userName {
+    text-align: right;;
+}
+
+body {
+    /* background-color:rgb(187, 223, 246); */
+    background-color:aqua;
+}
+
+.userCards {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+ }
+
+
+ /* CSS for table in transaction history */
+ tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  tr:nth-child(even) {
+    background-color: lightcyan;
+  }
+
+  th {
+    width: 400px;
+    text-align: center;
+    padding-left: 10px;;
+  }
+
+  td {
+    width: 400px;
+    padding-left: 40px;
+  }
+
+  #center {
+    text-align: left;
+    padding-left: 35px;
+  }
+
+  #last {
+    text-align: left;
+    padding-left: 40px;
+  }
+
+ Link, .hyperlink {
+    color: blue
+  }
