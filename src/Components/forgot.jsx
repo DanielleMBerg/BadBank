@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import '../styles/styles.css';
-import { Card } from './context.js'
+import { Card } from './context.jsx'
 import { Link } from "react-router-dom";
 import { UserContext } from '../index';
 
@@ -29,8 +29,8 @@ export const ForgotPassword = ({handlePasswordUpdated}) => {
 		} else if (passwordInput.length < 8) {
 			alert('Error: Your password needs to be at least 8 characters long.');
 			return false;
-	  } else {
-	  return true;
+		} else {
+		return true;
 		}
 	}
 

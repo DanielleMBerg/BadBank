@@ -1,6 +1,6 @@
 import React, { useState, useContext }    from 'react';
-import { Card }                           from './context.js';
-import { UserContext }                    from '../index';
+import { Card }                           from './context.jsx';
+import { UserContext }                    from '../index.jsx';
 
 export function CreateAccount(){
   const [show, setShow]         = useState(true);

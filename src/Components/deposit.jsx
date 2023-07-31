@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Card }                                   from './context.js'
+import { Card }                                   from './context.jsx'
 import { UserContext }                            from '../index';
 import { RecordTransactionHistory }               from './history.jsx';
 import { Link }                                   from "react-router-dom";

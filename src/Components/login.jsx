@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import '../styles/styles.css';
-import { Card } from './context.js'
+import { Card } from './context.jsx'
 import { UserContext } from '../index';
 import { Link } from "react-router-dom";
 import { ForgotPassword } from './forgot';
@@ -48,6 +48,10 @@ export function Login(){
   }
 
   return (
+    <>
+          <div
+        className="image-row"
+       >
     <div className="account-grid">
       <div className="deposit-container">
         { forgotPassword ? (
@@ -105,5 +109,7 @@ export function Login(){
         )}
       </div>
     </div>
+    </div>
+    </>
   )  
 }

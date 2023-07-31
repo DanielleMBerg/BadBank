@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import '../styles/styles.css';
-import { Card } from './context.js'
-import { UserContext } from '../index';
+import { Card } from './context.jsx'
+import { UserContext } from '../index.jsx';
 import { Link } from "react-router-dom";
-import { RecordTransactionHistory } from './history';
+import { RecordTransactionHistory } from './history.jsx';
 
 
 export function Withdraw(){
@@ -82,7 +82,10 @@ export function Withdraw(){
   };
 
   const validate = () => {
-    if (isSavings && deposit > savingsAccount) {
+    if (deposit < 0) {
+      alert("Postive numbers only.");
+      return false;
+    } else if (isSavings && deposit > savingsAccount) {
       alert('Not enough money in account to support withdrawal request. Transaction failed.');
       return false;
     } else if (!isSavings && deposit > checkingAccount) {
@@ -103,7 +106,7 @@ export function Withdraw(){
       let newTotal = savingsAccount - deposit;
       currentUser.savingsAccount = newTotal;
       setTransactionHistory([...transactionHistory, [deposit, "Savings", "(-)"]])
-      currentUser.transactions.push([deposit, "Savings", "(-))"])
+      currentUser.transactions.push([deposit, "Savings", "(-)"])
       setSavingsAccount(newTotal); 
       } else {
       let newTotal = checkingAccount - deposit;
