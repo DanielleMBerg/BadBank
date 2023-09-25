@@ -4,44 +4,37 @@ import { UserContext }                            from '../index';
 import { RecordTransactionHistory }               from './history.jsx';
 import { Link }                                   from "react-router-dom";
 import '../styles/styles.css';
+import { DepositForm }                            from './depositform.jsx';
+import { Success }                                from './success.jsx';
 
 export function Deposit(){
-  const ctx = useContext(UserContext);
-
-  const currentUser = ctx.users.find((users) => users.signedIn === true);
-  let startingSavingsBalance;
-  let startingCheckingBalance;
-  let startingTotalBalance;
-
-  if (currentUser) {
-    startingSavingsBalance = currentUser.savingsAccount;
-    startingCheckingBalance = currentUser.checkingAccount;
-    startingTotalBalance = startingSavingsBalance + startingCheckingBalance;
-  } else {
-    startingSavingsBalance = 0;
-    startingCheckingBalance = 0;
-    startingTotalBalance = 0;
-  }
-
-  const [savingsAccount, setSavingsAccount]         = useState(startingSavingsBalance);
-  const [checkingAccount, setCheckingAccount]       = useState(startingCheckingBalance);
-  const [totalBalance, setTotalBalance]             = useState(startingTotalBalance);
+  
   const [isCash, setIsCash]                         = useState('Deposit');
   const [isCheck, setIsCheck]                       = useState(false);
   const [isSavings, setIsSavings]                   = useState(null);
   const [accountSelected, setAccountSelected]       = useState(false);
   const [optionSelected, setOptionSelected]         = useState(false)
   const [deposit, setDeposit]                       = useState(0);
-  const [transactionHistory, setTransactionHistory] = useState([]);
   const [show, setShow]                             = useState(true);
   const [isLoggedIn, setIsLoggedIn]                 = useState(false);
-  const [imageLoaded, setImageLoaded]               = useState(false);
+  const ctx                                         = useContext(UserContext);
+  
+  const transactionType = "deposit";
 
-  const status = totalBalance;
+  const currentUser = ctx.users.find((users) => users.signedIn === true);
+  let savingsAccount;
+  let checkingAccount;
+  let totalBalance;
+  
+  if (currentUser) {
+    savingsAccount = currentUser.savingsAccount;
+    checkingAccount = currentUser.checkingAccount;
+    totalBalance = savingsAccount + checkingAccount;
+  }
 
   useEffect(() => {
     if (currentUser) setIsLoggedIn(true);
-  }, [currentUser])
+  }, [currentUser]);
 
   const clearForm = () => {
     setDeposit(0);
@@ -54,7 +47,8 @@ export function Deposit(){
   
   const handleChange = e => {
     let amount = e.target.value;
-    setDeposit(Number(amount));
+    const rounded = Math.round(amount * 100)/100;
+    setDeposit(Number(rounded));
   };
 
   const validate = () => {
@@ -73,19 +67,14 @@ export function Deposit(){
     event.preventDefault();
     if (!validate()) return;
     if (isSavings) {
-      let newTotal = savingsAccount + deposit;
-      setSavingsAccount(newTotal); 
-      setTransactionHistory([...transactionHistory, [deposit, "Savings", "(+)"]])
+      let newTotal = Math.round((savingsAccount + deposit) * 100)/100;
       currentUser.savingsAccount = newTotal;
       currentUser.transactions.push([deposit, "Savings", "(+)"])
     } else {
-      let newTotal = checkingAccount + deposit;
-      setCheckingAccount(newTotal);
-      setTransactionHistory([...transactionHistory, [deposit, "Checking", "(+)"]])
+      let newTotal = Math.round((checkingAccount + deposit) * 100)/100;
       currentUser.checkingAccount = newTotal;
       currentUser.transactions.push([deposit, "Checking", "(+)"])
     }
-    setTotalBalance(totalBalance + deposit);
     setShow(false);
   }
 
@@ -110,139 +99,55 @@ export function Deposit(){
     setOptionSelected(true)
   };
 
-  const handleFileLoaded = (e) => {
-    if (e.target.value) {
-      setImageLoaded(true);
-    } else {
-      setImageLoaded(false)
-    }
-  }
+  
 
   return (
-    <div className="deposit-grid">
-        <Card
-          header="Deposit"
-          body= {
-            isLoggedIn ? (
-              show ? (
-                <form className="container-deposit">
-                  <h5>Savings Account ${savingsAccount}</h5>
-                  <h5>Checking Account ${checkingAccount}</h5>
-                  <h5>Total Balance ${status}</h5>
-                  <br></br>
-                  <h6>Select account:</h6>
-                    <input 
-                      type="button"
-                      onClick={chooseSavingsOrChecking}
-                      value="Savings"
-                      className="btn savings"
-                    ></input>
-                    <input 
-                      type="button"
-                      onClick={chooseSavingsOrChecking}
-                      value="Checking"
-                      className="btn checking"
-                    ></input>
-                  <br></br>
-                  {accountSelected && (
-                    <div>
-                      <h6>Select type of deposit:</h6>
-                        <input
-                          type="button"
-                          onClick={chooseCashOrCheck}
-                          value="Cash"
-                          className="btn cash"
-                        ></input>
-                        <input
-                          type="button"
-                          onClick={chooseCashOrCheck}
-                          value="Check"
-                          className="btn check"
-                        ></input>
-                    </div>
-                  )}
-                  {optionSelected && (
-                    <div>
-                      <label>
-                        <input
-                          id="number"
-                          type="text"
-                          onChange={handleChange}
-                          placeholder={`Enter ${isCash} Amount`}
-                        ></input>
-                      </label>
-                      <br></br>
-                        {isCheck ? (
-                          <>
-                          <label for="file">Upload image of check.</label>
-                          <input
-                            id="checkPix"
-                            type="file"
-                            accept="image/*,.pdf"
-                            onChange={handleFileLoaded}
-                          ></input>
-                          <button
-                            id="submit"
-                            disabled={(deposit !== 0 && imageLoaded ? false : true)}
-                            onClick={handleSubmit}
-                            className="btn btn-success"
-                          >Submit Deposit</button>
-                          </>
-                        ):(
-                          <button
-                          id="submit"
-                          disabled={deposit !== 0 ? false : true}
-                          onClick={handleSubmit}
-                          className="btn btn-success"
-                          >Submit Deposit</button>
-                        )}
-                    </div>
-                  )}
-                </form>
-                ):(
-                  <>
-                    <h5>Savings Account ${savingsAccount}</h5>
-                    <h5>Checking Account ${checkingAccount}</h5>
-                    <h5>Total Balance ${status}</h5>
-                    <br></br>
-                    <h5>Success! You made a deposit of ${deposit}!</h5>
-                      <button
-                        type="submit"
-                        className="btn btn-success"
-                        onClick={clearForm}
-                      >Make another deposit</button>
-                  </>
-                )
-          ):(
-            <>
-            <h5>You need to log in first in order to deposit money.</h5>
-            <Link className="btn btn-primary text-uppercase" to="/Components/login/">Log In</Link>
-            </>
-          )
-          
-          }
-          />
+    <div className="image-row deposit">
+      <div className="deposit-grid">
           <Card
-            header="Transaction History"
-            body={
+            header="Deposit"
+            body= {
+              isLoggedIn ? (
+                show ? (
+                  <DepositForm 
+                    savingsAccount={savingsAccount}
+                    checkingAccount={checkingAccount}
+                    totalBalance={totalBalance}
+                    chooseSavingsOrChecking={chooseSavingsOrChecking}
+                    chooseCashOrCheck={chooseCashOrCheck}
+                    accountSelected={accountSelected}
+                    optionSelected={optionSelected}
+                    handleChange={handleChange}
+                    isCash={isCash}
+                    isCheck={isCheck}
+                    deposit={deposit}
+                    handleSubmit={handleSubmit}
+                  ></DepositForm>
+                  ):(
+                  <Success
+                    savingsAccount={savingsAccount}
+                    checkingAccount={checkingAccount}
+                    totalBalance={totalBalance}
+                    deposit={deposit}
+                    clearForm={clearForm}
+                    transactionType={transactionType}
+                    ></Success>
+                  )
+            ):(
               <>
-            <table>
-              <thead>
-                <tr>
-                  <th>Amount</th>
-                  <th id="center">Account</th>
-                  <th id="last">Type</th>
-                </tr>
-              </thead>
-            </table>
-            <table>
-              <tbody>
-                <RecordTransactionHistory currentUser={currentUser}></RecordTransactionHistory>
-              </tbody>
-            </table>
-            </>
+              <h5>You need to log in first in order to deposit money.</h5>
+              <Link className="btn btn-primary text-uppercase" to="/Components/login/">Log In</Link>
+              </>
+            )
+            }
+          />
+            <Card
+              header="Transaction History"
+              body= {
+                  <RecordTransactionHistory currentUser={currentUser}></RecordTransactionHistory>
               }
-          ></Card>
+            ></Card>
+      </div>
     </div>
   );
 };
