@@ -1,47 +1,40 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState }        from 'react';
+import { Card }                                          from './context.jsx'
+import { UserContext }                                   from '../index.jsx';
+import { Link }                                          from "react-router-dom";
+import { RecordTransactionHistory }                      from './history.jsx';
+import { Success }                                       from './success.jsx';
+import { WithdrawalForm }                                from './withdrawalform.jsx';
 import '../styles/styles.css';
-import { Card } from './context.jsx'
-import { UserContext } from '../index.jsx';
-import { Link } from "react-router-dom";
-import { RecordTransactionHistory } from './history.jsx';
 
 
 export function Withdraw(){
   const ctx = useContext(UserContext);
 
   const currentUser = ctx.users.find((users) => users.signedIn === true);
-  let startingSavingsBalance;
-  let startingCheckingBalance;
-  let startingTotalBalance;
+  let savingsAccount;
+  let checkingAccount;
+  let totalBalance;
 
   if (currentUser) {
-    startingSavingsBalance = currentUser.savingsAccount;
-    startingCheckingBalance = currentUser.checkingAccount;
-    startingTotalBalance = startingSavingsBalance + startingCheckingBalance;
-  } else {
-    startingSavingsBalance = 0;
-    startingCheckingBalance = 0;
-    startingTotalBalance = 0;
-  }
-  const { useEffect, useState } = React;
+    savingsAccount = currentUser.savingsAccount;
+    checkingAccount = currentUser.checkingAccount;
+    totalBalance = savingsAccount + checkingAccount;
+  } 
 
-  const [savingsAccount, setSavingsAccount]         = useState(startingSavingsBalance);
-  const [checkingAccount, setCheckingAccount]       = useState(startingCheckingBalance);
-  const [totalBalance, setTotalBalance]             = useState(startingTotalBalance);
   const [isWithdrawal20, setIsWithdrawalUnder100]   = useState('');
   const [isWithdrawal100, setIsWithdrawalOver100]   = useState('');
   const [deposit, setDeposit]                       = useState(0);
-  const [transactionHistory, setTransactionHistory] = useState([]);
   const [show, setShow]                             = useState(true);
   const [isLoggedIn, setIsLoggedIn]                 = useState(false);
-  
   const [isSavings, setIsSavings]                   = useState(null);
   const [accountSelected, setAccountSelected]       = useState(false);
-  let status = totalBalance;
+  const transactionType = "withdrawal";
+
 
   useEffect(() => {
     if (currentUser) setIsLoggedIn(true);
-  }, [currentUser])
+  }, [currentUser]);
 
   const clearForm = () => {
     setDeposit(0);
@@ -78,7 +71,8 @@ export function Withdraw(){
       setIsWithdrawalUnder100('');
       setIsWithdrawalOver100('')
     }
-    setDeposit(Number(amount));
+    const rounded = Math.round(amount * 100)/100;
+    setDeposit(Number(rounded));
   };
 
   const validate = () => {
@@ -103,104 +97,46 @@ export function Withdraw(){
     event.preventDefault();
     if (!validate()) return;
     if (isSavings) {
-      let newTotal = savingsAccount - deposit;
+      let newTotal = Math.round((savingsAccount - deposit) * 100)/100;
       currentUser.savingsAccount = newTotal;
-      setTransactionHistory([...transactionHistory, [deposit, "Savings", "(-)"]])
       currentUser.transactions.push([deposit, "Savings", "(-)"])
-      setSavingsAccount(newTotal); 
       } else {
-      let newTotal = checkingAccount - deposit;
+      let newTotal = Math.round((checkingAccount - deposit) * 100)/100;
       currentUser.checkingAccount = newTotal;
-      setCheckingAccount(newTotal);
-      setTransactionHistory([...transactionHistory, [deposit, "Checking", "(-)"]])
       currentUser.transactions.push([deposit, "Checking", "(-)"])
       }
-    let newBalance = totalBalance - deposit;
-    setTotalBalance(newBalance);
     setShow(false);
   };
 
   return (
-    <div className="deposit-grid">
+    <div className="image-row withdraw">
+      <div className="deposit-grid">
         <Card
           header="Withdraw"
           body= {
             isLoggedIn ? (
             show ? (
-              <form className="container-deposit">
-                <h5>Savings Account ${savingsAccount}</h5>
-                <h5>Checking Account ${checkingAccount}</h5>
-                <h5>Total Balance ${status}</h5>
-                <br></br>
-                <h6>Select account:</h6>
-                  <input
-                    type="button"
-                    onClick={chooseSavingsOrChecking}
-                    value="Savings"
-                    className="btn savings"
-                ></input>
-                  <input
-                    type="button"
-                    onClick={chooseSavingsOrChecking}
-                    value="Checking"
-                    className="btn checking"
-                ></input>
-                <br></br>
-                {accountSelected && (
-                  <div>
-                  <label>
-                    <input
-                      id="number"
-                      type="text"
-                      onChange={handleChange}
-                      placeholder="Enter Amount"
-                    ></input>
-                  </label>                 
-                  {isWithdrawal20 && (
-                    <>
-                      <label className='label'>What denomination would you like your money to be in?</label>
-                        <select>
-                          <option>$1 bills</option>
-                          <option>$5 bills</option>
-                          <option>$10 bills</option>
-                          <option>$20 bills</option>
-                        </select>
-                    </>
-                  )}
-                  {isWithdrawal100 && (
-                    <>
-                      <label className="label">What denomination would you like your money to be in?</label>
-                      <br></br>
-                        <select>
-                          <option>$20 bills</option>
-                          <option>$50 bills</option>
-                          <option>$100 bills</option>
-                        </select>
-                    </>
-                  )}
-                  <br></br>
-                  <button
-                    id="submit"
-                    className="btn btn-success"
-                    onClick={handleSubmit}
-                    disabled={deposit !== 0 ? false : true}
-                  >Submit Withdrawal</button>
-                  </div>
-                )}
-              </form> 
+              <WithdrawalForm
+                savingsAccount={savingsAccount}
+                checkingAccount={checkingAccount}
+                totalBalance={totalBalance}
+                chooseSavingsOrChecking={chooseSavingsOrChecking}
+                accountSelected={accountSelected}
+                handleChange={handleChange}
+                deposit={deposit}
+                handleSubmit={handleSubmit}
+                isWithdrawal20={isWithdrawal20}
+                isWithdrawal100={isWithdrawal100}
+                ></WithdrawalForm>
             ):(
-               <>
-                <h5>Savings Account ${savingsAccount}</h5>
-                <h5>Checking Account ${checkingAccount}</h5>
-                <h5>Total Balance ${status}</h5>
-                <br></br>
-                <h5>Success! You made a withdrawal of ${deposit}!</h5>
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    onClick={clearForm}
-                  >Make another withdrawal</button>
-              </>
+              <Success
+                savingsAccount={savingsAccount}
+                checkingAccount={checkingAccount}
+                totalBalance={totalBalance}
+                deposit={deposit}
+                clearForm={clearForm}
+                transactionType={transactionType}
+              ></Success>
             )
             ):(
               <>
@@ -209,28 +145,14 @@ export function Withdraw(){
               </>
             )
           }
-        />
+          />
           <Card
             header="Transaction History"
-            body={
-              <>
-            <table>
-              <thead>
-                <tr>
-                  <th>Amount</th>
-                  <th id="center">Account</th>
-                  <th id="last">Type</th>
-                </tr>
-              </thead>
-            </table>
-            <table>
-              <tbody>
-                <RecordTransactionHistory currentUser={currentUser}></RecordTransactionHistory>
-              </tbody>
-            </table>
-            </>
-              }
+            body= {
+              <RecordTransactionHistory currentUser={currentUser}></RecordTransactionHistory>
+            }
           ></Card>
       </div>
+    </div>
   );
 };
