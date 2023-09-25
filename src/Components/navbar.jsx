@@ -1,21 +1,21 @@
-import { Link } from "react-router-dom";
-import { UserContext } from '../index';
+import { Link }                        from "react-router-dom";
+import { UserContext }                 from '../index';
 import React, { useContext, useState } from 'react';
 
 
 export function NavBar(){
-  const ctx               = useContext(UserContext);
-  const [currentUser, setCurrentUser] = useState('')
+  const ctx                             = useContext(UserContext);
+  const [currentUser, setCurrentUser]   = useState('')
 
 
 const turnOnButton = () => {
   setCurrentUser(ctx.users.find(users => users.signedIn === true))
 }
 
-  const handleLogOut = (e) => {
-    currentUser.signedIn = false;
-    setCurrentUser('');
-  }
+const handleLogOut = (e) => {
+  currentUser.signedIn = false;
+  setCurrentUser('');
+}
 
   return (
     <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
