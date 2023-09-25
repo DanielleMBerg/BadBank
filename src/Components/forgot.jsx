@@ -1,18 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } 	from 'react';
+import { Card } 						from './context.jsx'
+import { Link } 						from "react-router-dom";
+import { UserContext } 					from '../index';
 import '../styles/styles.css';
-import { Card } from './context.jsx'
-import { Link } from "react-router-dom";
-import { UserContext } from '../index';
 
 export const ForgotPassword = ({handlePasswordUpdated}) => {
-	const [changePassword, setChangePassword] 				= useState(true);
-	const [emailInput, setEmailInput]         				= useState(null);
-	const [passwordInput, setPasswordInput]   				= useState(null);
-	const [confirmPasswordInput, setConfirmPasswordInput]   = useState(null);
+	const [changePassword, setChangePassword] 							= useState(true);
+	const [emailInput, setEmailInput]         							= useState(null);
+	const [passwordInput, setPasswordInput]   							= useState(null);
+	const [confirmPasswordInput, setConfirmPasswordInput]   			= useState(null);
 
 	const ctx = useContext(UserContext);
 	const user = ctx.users.find(users => users.email === emailInput);
-	
 	
 	const validateUser = () => {
 		if (!user) {
