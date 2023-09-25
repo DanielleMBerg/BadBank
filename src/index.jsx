@@ -11,9 +11,7 @@ import { Deposit }       from './Components/deposit';
 import { Withdraw }      from './Components/withdraw';
 import { AllData }       from './Components/alldata';
 
-
 export const UserContext = React.createContext(null);  
-
 
 export function Spa() {
 
