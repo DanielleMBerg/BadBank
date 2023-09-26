@@ -1,8 +1,9 @@
 # BadBank
 This was a class assignment. The first version was to practice building a single page application and sharing context throughout. The second version was to practice connecting the front end with a server and database, as well as practicing authentication and authoriozation.
 
-<img width="1470" alt="Screenshot 2023-09-25 at 4 57 30 PM" src="https://github.com/DanielleMBerg/BadBank/assets/124546091/a87e6e86-8ca6-4374-a13a-c12be1a522ff">
-<img width="1470" alt="Screenshot 2023-09-25 at 4 56 52 PM" src="https://github.com/DanielleMBerg/BadBank/assets/124546091/d3a9cc7d-c4ed-490f-9761-8709c2a44811">
+<img width="1470" alt="Screenshot 2023-09-25 at 5 01 00 PM" src="https://github.com/DanielleMBerg/BadBank/assets/124546091/7b92f317-e70b-4553-bc2c-c11961487735">
+<img width="1470" alt="Screenshot 2023-09-25 at 5 01 34 PM" src="https://github.com/DanielleMBerg/BadBank/assets/124546091/e07178b2-2ccb-4f4d-838f-f7f36e03f58b">
+
 
 # How to Run
 To run on your own device, git clone the repo.
