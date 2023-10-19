@@ -5,7 +5,7 @@
 // app.use(express.static('/public'));
 // app.use(cors());
 
-const dal = require('./dal.js')
+const dal = require('./dal.js');
 const express = require('express');
 const bodyParser = require('body-parser')
 const path = require('path');
